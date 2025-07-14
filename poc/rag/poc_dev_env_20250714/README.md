@@ -4,10 +4,10 @@
 
 ## 技術・環境整理
 
-1. データ取得と前処理（BigQuery & DLP）
-2. ベクトルデータベース（Pinecone）
-3. RAG実行（Claude）
-4. 一連のツールを連携・検証する環境（Python）
+- データ取得と前処理（BigQuery & DLP）
+- ベクトルデータベース（Pinecone）
+- RAG実行（Claude）
+- 一連のツールを連携・検証する環境（Python）
 
 ### 直近決めたいこと・欲しいもの
 
