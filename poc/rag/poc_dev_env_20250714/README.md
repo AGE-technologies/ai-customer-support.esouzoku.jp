@@ -12,24 +12,39 @@
 
 ## TODO
 
-- ~~[] GCP周り~~
+- [] GCP周り
   - [x] gcloud cliインストール
-  - [] gcloud 初期化
-  - [] Big Query API、DLP API 有効化
-  - [] 認証情報の確認
+  - [x] gcloud 初期化
+  - [] Big Query API、DLP API確認
+    - [] 権限付与依頼
+      - BigQuery クエリジョブの実行権限:
+        - roles/bigquery.jobUser
+        - roles/bigquery.dataViewer（対象データセットに対して）
+      - DLP マスキング用権限:
+        - roles/dlp.user
+      - 共通権限:
+        - roles/serviceusage.serviceUsageConsumer
 - [x] Python環境
   - [x] 仮想環境(uv)
   - [x] ライブラリインストール
   - [x] 各種API クライアント
   - linter formatterは一旦なし(ruffあたりおすすめされてる)
-- [] Claude Code でのコーディング方法調べる
-- [] APIキーの管理
-- [] ~~BigQuery・DLP API の疎通確認~~
+- [x] Claude Code でのコーディング方法を軽く調べる
+- [x] APIキーの管理方法
+  - 一旦環境変数で。
+- [] BigQueryの疎通確認
+- [] DLPの疎通確認
 - [] Claude Code API の疎通確認
 - [] OpenAI API の疎通確認
 - [] Pinecone API の疎通確認
-- [] ~~BigQuery と~~ OpenAI と Pinecone の連携確認
+- [] OpenAI と Pinecone の連携確認
 - [] Claude と Pinecone の連携確認
+
+## 直近(2025/07/15〜)やること
+
+- [] DLPの精度チェック
+- [] OpenAIの文字列のベクトル化
+- [] Pineconeにデータ突っ込んでインデックス化してみる
 
 ## Python環境構築(uv)
 
