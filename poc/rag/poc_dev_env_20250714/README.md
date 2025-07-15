@@ -6,24 +6,15 @@
 
 - データ取得と前処理（BigQuery & DLP）
 - ベクトルデータベース（Pinecone）
-- RAG実行（Claude）
+- ベクトル化(OpenAI)
+- RAG実行（Pinecone + Claude）
 - 一連のツールを連携・検証する環境（Python）
-
-### 直近決めたいこと・欲しいもの
-
-- ベクトル化を行うためのツールが必要 (or)
-  - OpenAI
-  - Coreha
-- メール回答に適したLLM選定 (or)
-  - Claude 3.5 <- APIキーいただいたのでこれでよさそう
-  - GPT-4-turbo
 
 ## TODO
 
 - [] GCP周り
   - [x] gcloud cliインストール
-  - [ ] gcloud 初期化
-    - プロジェクトの選択で一旦ストップ。メールデータの溜まっているプロジェクトが知りたいです
+  - [] gcloud 初期化
   - [] Big Query API、DLP API 有効化
   - [] 認証情報の確認
 - [] Python環境
