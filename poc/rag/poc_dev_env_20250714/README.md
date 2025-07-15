@@ -20,7 +20,7 @@
 - [] Python環境
   - [] 仮想環境
   - [] ライブラリインストール
-  - [] Claude API クライアント
+  - [] 各種API クライアント
 - [] APIキーの管理
 - [] BigQuery・DLP API の疎通確認
 - [] Claude Code API の疎通確認
