@@ -24,5 +24,7 @@
 - [] APIキーの管理
 - [] BigQuery・DLP API の疎通確認
 - [] Claude Code API の疎通確認
-- [] BigQuery と Claude の連携確認
+- [] OpenAI API の疎通確認
+- [] Pinecone API の疎通確認
+- [] BigQuery と OpenAI と Pinecone の連携確認
 - [] Claude と Pinecone の連携確認
