@@ -4,7 +4,7 @@
 
 ## 技術・環境整理
 
-- データ取得と前処理（BigQuery & DLP）
+- データ取得と前処理（BigQuery & DLP）(一旦ローカルテキストファイルでいいかも？？ Metabaseからローカルファイルにコピペ保存する形にして、ファイル読み込みでも検証可能)
 - ベクトルデータベース（Pinecone）
 - ベクトル化(OpenAI)
 - RAG実行（Pinecone + Claude）
@@ -12,7 +12,7 @@
 
 ## TODO
 
-- [] GCP周り
+- ~~[] GCP周り~~
   - [x] gcloud cliインストール
   - [] gcloud 初期化
   - [] Big Query API、DLP API 有効化
@@ -22,9 +22,9 @@
   - [] ライブラリインストール
   - [] 各種API クライアント
 - [] APIキーの管理
-- [] BigQuery・DLP API の疎通確認
+- [] ~~BigQuery・DLP API の疎通確認~~
 - [] Claude Code API の疎通確認
 - [] OpenAI API の疎通確認
 - [] Pinecone API の疎通確認
-- [] BigQuery と OpenAI と Pinecone の連携確認
+- [] ~~BigQuery と~~ OpenAI と Pinecone の連携確認
 - [] Claude と Pinecone の連携確認
