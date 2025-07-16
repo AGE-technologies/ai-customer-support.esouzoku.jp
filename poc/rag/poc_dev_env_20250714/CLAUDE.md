@@ -26,25 +26,26 @@
 
 ## よく使うコマンド
 
-### アプリケーションの実行
-```bash
-uv run main.py
-```
-
 ### パッケージ管理
-```bash
-# 依存関係のインストール
-uv sync
 
+```bash
 # 新しいパッケージの追加
 uv add package-name
 
-# requirements.txtから追加
-uv add -r requirements.txt
+# 依存関係のインストール
+uv sync
+
+# 実行
+uv run xxx.py
 ```
 
-### Python環境
+### Python環境（uv）
+
 ```bash
+# uv インストール & 初期化
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv init
+
 # 特定のPythonバージョンをインストール
 uv python install 3.13.5
 
@@ -56,25 +57,60 @@ uv python pin 3.13.5
 
 これは最小限の構造を持つPOC開発環境です：
 
-- `main.py` - 基本的なhello world機能を持つエントリーポイント
+- `check_xxx.py` - 各APIの疎通確認や連携確認を行うためのPythonスクリプト
 - `pyproject.toml` - プロジェクト設定と依存関係
-- `requirements.txt` - 代替の依存関係指定
 - `README.md` - 開発セットアップドキュメントとTODOリスト
 
 ### 計画されたアーキテクチャ（READMEより）
+
 ```
 BigQuery → DLP API → OpenAI (ベクトル化) → Pinecone → Claude → レスポンス
 ```
 
 ## 開発ワークフロー
 
-README TODOリストに基づいて、開発は以下の順序で進行しています：
-1. ✅ 環境セットアップ（Python + uv）
-2. ⏳ API接続確認（BigQuery、DLP、OpenAI、Pinecone、Claude）
-3. ⏳ DLP精度テスト
-4. ⏳ OpenAIテキストベクトル化
-5. ⏳ Pineconeインデックス化とデータ統合
-6. ⏳ Claude + Pinecone統合によるRAG
+README TODOリストに基づいて、下記項目の達成を目指しています：
+
+### 環境セットアップ
+- [x] Python環境（uv）
+- [x] 各種API クライアント
+- [x] APIキーの管理方法
+
+### GCP関連
+- [x] gcloud cliインストール
+- [x] gcloud 初期化
+- [x] `gcloud auth application-default login`
+- [x] DLP 有効化
+- [x] 権限付与（BigQuery、DLP API）
+- [ ] BigQueryの疎通確認
+- [x] DLPの疎通確認 (`check_dlp_api.py`)
+
+### API接続確認
+- [x] OpenAI API の疎通確認 (`check_open_api_embeding.py`)
+- [] DLPの疎通確認 (`check_dlp_api.py`)
+- [ ] Claude Code API の疎通確認
+- [ ] Pinecone API の疎通確認
+
+### 連携確認
+- [x] OpenAIの文字列のベクトル化
+- [ ] Pineconeにデータ突っ込んでインデックス化
+- [ ] OpenAI と Pinecone の連携確認
+- [ ] Claude と Pinecone の連携確認
+
+### 精度テスト
+- [ ] DLPの精度チェック
+
+
+--- 
+
+## これより下記の項目はClaudeにより編集されない
+
+## 注意事項
+
+- これは開発初期段階の概念実証です
+- READMEには実装進捗の詳細なTODOアイテムが含まれています
+- 環境はモダンなPython依存関係管理のためにuvを使用
+- 各サービス間のRAGパイプライン統合の検証に焦点を当てています
 
 ## API統合要件
 
@@ -85,20 +121,6 @@ README TODOリストに基づいて、開発は以下の順序で進行してい
   - 環境変数
 - Pinecone API
 - Claude API
-
-## ファイル構造
-
-現在は必要最小限のファイルのみ：
-- アプリケーション全体を含む単一の `main.py`
-- 標準的なPythonプロジェクトファイル（`pyproject.toml`、`requirements.txt`）
-- ドキュメント（`README.md`）
-
-## 注意事項
-
-- これは開発初期段階の概念実証です
-- READMEには実装進捗の詳細なTODOアイテムが含まれています
-- 環境はモダンなPython依存関係管理のためにuvを使用
-- 各サービス間のRAGパイプライン統合の検証に焦点を当てています
 
 ## コーディング方針 
 
