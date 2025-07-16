@@ -1,3 +1,0 @@
-pinecone
-anthropic
-openai

@@ -15,8 +15,11 @@
 - [] GCP周り
   - [x] gcloud cliインストール
   - [x] gcloud 初期化
+  - [x] `gcloud auth application-default login`
+  - [x] DLP 有効化
+    - [機密データの匿名化](https://cloud.google.com/sensitive-data-protection/docs/deidentify-sensitive-data?hl=ja)
   - [] Big Query API、DLP API確認
-    - [] 権限付与依頼
+    - [x] 権限付与依頼
       - BigQuery クエリジョブの実行権限:
         - roles/bigquery.jobUser
         - roles/bigquery.dataViewer（対象データセットに対して）
@@ -24,6 +27,7 @@
         - roles/dlp.user
       - 共通権限:
         - roles/serviceusage.serviceUsageConsumer
+      - 一時的にオーナー権限をいただいた
 - [x] Python環境
   - [x] 仮想環境(uv)
   - [x] ライブラリインストール
@@ -66,8 +70,7 @@ uv python pin 3.13.5
 パッケージ追加
 
 ```
-uv add -r requirements.txt
-uv sync
+uv add <<package>>
 ```
 
 実行
@@ -75,3 +78,22 @@ uv sync
 ```
 uv run xxx.py
 ```
+
+## GCPのAPI利用
+
+[Google Cloud CLI をインストールする](https://cloud.google.com/sdk/docs/install-sdk?utm_source=chatgpt.com&hl=ja)
+
+GCPのAPIを利用するときは、APIが有効化されているか確認。権限があるかを確認。権限がなければロール付与などを依頼。
+
+自身のGoogleアカウントを使って SDK のAPIを利用するには下記のコマンドを使う
+
+```
+gcloud auth application-default login
+```
+
+[アプリケーションのデフォルト認証情報の仕組み](https://cloud.google.com/docs/authentication/application-default-credentials?utm_source=chatgpt.com&hl=ja)
+
+これによって、認証情報がローカルに保存され、SDK利用時に自動認証される
+
+> Linux / macOS: $HOME/.config/gcloud/application_default_credentials.json
+> Windows: %APPDATA%\gcloud\application_default_credentials.json
