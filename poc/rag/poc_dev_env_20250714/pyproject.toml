@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "anthropic>=0.57.1",
+    "google-cloud-dlp>=3.31.0",
     "numpy>=2.2.6",
     "openai>=1.95.1",
     "pinecone>=7.3.0",

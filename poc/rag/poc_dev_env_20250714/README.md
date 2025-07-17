@@ -37,7 +37,8 @@
 - [x] APIキーの管理方法
   - 一旦環境変数で。
 - [] BigQueryの疎通確認
-- [] DLPの疎通確認
+- [x] DLPの疎通確認
+  - `check_dlp_api.py` で確認
 - [] Claude Code API の疎通確認
 - [x] OpenAI API の疎通確認
   - `check_open_api_embeding.py` で確認
@@ -47,7 +48,7 @@
 
 ## 直近(2025/07/15〜)やること
 
-- [] DLPの精度チェック
+- [x] DLPの精度チェック
 - [x] OpenAIの文字列のベクトル化
 - [] Pineconeにデータ突っ込んでインデックス化してみる
 

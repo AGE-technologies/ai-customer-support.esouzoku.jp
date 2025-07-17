@@ -87,7 +87,7 @@ README TODOリストに基づいて、下記項目の達成を目指していま
 
 ### API接続確認
 - [x] OpenAI API の疎通確認 (`check_open_api_embeding.py`)
-- [] DLPの疎通確認 (`check_dlp_api.py`)
+- [x] DLPの疎通確認 (`check_dlp_api.py`)
 - [ ] Claude Code API の疎通確認
 - [ ] Pinecone API の疎通確認
 
@@ -116,7 +116,7 @@ README TODOリストに基づいて、下記項目の達成を目指していま
 
 このシステムには以下のAPIキーと認証情報が必要：
 - GCP（BigQuery、DLP API）
-  - 基本的に `gcloud auth application-default login` を行うので、認証情報はローカルに保存されている。その前提で、SDKを利用する
+  - 基本的に `gcloud auth application-default login` を行い、認証情報はローカルに保存する。その前提で、SDKを利用する
 - OpenAI API
   - 環境変数
 - Pinecone API
@@ -136,3 +136,16 @@ README TODOリストに基づいて、下記項目の達成を目指していま
 - 新規作成・更新されたテキストファイルの最終行には空の改行を入れる
 - 外部APIのクライアントクラスがSDKに定義されている場合は基本的にmain関数の中で初期化する
 - その外部APIクライアントに依存する関数は、そのクライアントを引数として受け取る(簡易DI)
+
+## 用語定義
+
+- **CHECKファイル** : 疎通・連携確認のためのプログラムファイル。`check_` という接頭辞のあるファイルはこれ。
+- **CHECKED** : CHECKファイルの内容が、疎通・連携が確認された状態
+
+## コーディングとTODOリストの連携
+
+- CHECKファイルのドキュメントコメントとして `For Claude: CHECKED`　があればTODOの該当の項目にチェックを入れる
+- また `得られた知見` の内容はTODOリストに記載する必要はありません。代わりに、CHECKファイルの名前を項目につける
+- これらの項目の状態の更新は、「`Update TODO`」という指示で行われる。更新対象は下記
+  - CLAUDE.md
+  - README.md
