@@ -6,7 +6,8 @@
 
 - データ取得と前処理（BigQuery & DLP）(一旦ローカルテキストファイルでいいかも？？ Metabaseからローカルファイルにコピペ保存する形にして、ファイル読み込みでも検証可能)
 - ベクトルデータベース（Pinecone）
-- ベクトル化(OpenAI)
+- ベクトル化(~~OpenAI~~)
+  - ベクトル化は Pinecone でも可能。一旦こちらを使う
 - RAG実行（Pinecone + Claude）
 - 一連のツールを連携・検証する環境（Python）
 
@@ -42,8 +43,16 @@
 - [] Claude Code API の疎通確認
 - [x] OpenAI API の疎通確認
   - `check_open_api_embeding.py` で確認
+  - Pineconeに Embeddingの機能があることが判明もしかしたら使わないかも。
 - [] Pinecone API の疎通確認
+  - [] Pineconeインデックスの設定とクライアント接続確認
+  - [] サンプルメールデータの準備（10件のcustomerメール）
+  - [] メールをベクトル化してPineconeに登録する処理の実装（PineconeのEmbedding機能を使用）
+  - [] 新しいメールでの類似検索機能の実装
+  - [] 検索結果の妥当性確認（上位結果が実際に似ているかの検証）
+  - [] Pineconeメタデータ構造の最適化とQAペア対応への拡張検討
 - [] OpenAI と Pinecone の連携確認
+  - OpenAIのEmbeddingではなく、PineconeのEmbedding機能を使用する方針に変更
 - [] Claude と Pinecone の連携確認
 
 ## 直近(2025/07/15〜)やること
