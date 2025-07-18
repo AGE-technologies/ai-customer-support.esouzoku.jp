@@ -1,0 +1,15 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(npm run lint)",
+            "Bash(npm run test:*)"
+        ],
+        "deny": [
+            "Bash(curl:*)"
+        ]
+    },
+    "promptTemplate": {
+        "language": "日本語",
+        "pre": "これからの出力はすべて日本語でお願いします。"
+    }
+}
