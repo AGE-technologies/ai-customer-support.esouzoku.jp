@@ -13,22 +13,21 @@
 
 ## TODO
 
-- [] GCP周り
+- [x] GCP設定周り
   - [x] gcloud cliインストール
   - [x] gcloud 初期化
   - [x] `gcloud auth application-default login`
   - [x] DLP 有効化
     - [機密データの匿名化](https://cloud.google.com/sensitive-data-protection/docs/deidentify-sensitive-data?hl=ja)
-  - [] Big Query API、DLP API確認
-    - [x] 権限付与依頼
-      - BigQuery クエリジョブの実行権限:
-        - roles/bigquery.jobUser
-        - roles/bigquery.dataViewer（対象データセットに対して）
-      - DLP マスキング用権限:
-        - roles/dlp.user
-      - 共通権限:
-        - roles/serviceusage.serviceUsageConsumer
-      - 一時的にオーナー権限をいただいた
+  - [x] GCP権限付与依頼
+    - BigQuery クエリジョブの実行権限:
+      - roles/bigquery.jobUser
+      - roles/bigquery.dataViewer（対象データセットに対して）
+    - DLP マスキング用権限:
+      - roles/dlp.user
+    - 共通権限:
+      - roles/serviceusage.serviceUsageConsumer
+    - 一時的にオーナー権限をいただいた
 - [x] Python環境
   - [x] 仮想環境(uv)
   - [x] ライブラリインストール
