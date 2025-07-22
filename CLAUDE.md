@@ -1,6 +1,7 @@
 # Claude Code Development Guide
 
-このプロジェクトは TypeScript + Deno で構築されたAIカスタマーサポートシステムです。
+このプロジェクトは TypeScript + Deno
+で構築されたAIカスタマーサポートシステムです。
 
 ## 🎯 プロジェクト概要
 
@@ -54,6 +55,7 @@ ai-customer-support/
 ## 🔧 開発環境
 
 ### 必要なツール
+
 - Deno 1.40+
 - ngrok（開発用）
 - GCP プロジェクト
@@ -85,15 +87,18 @@ deno lint
 ## 🧪 テスト戦略
 
 TDD（テスト駆動開発）に準拠：
+
 1. **Red**: 失敗するテストを書く
 2. **Green**: 最小限のコードで通す
 3. **Refactor**: リファクタリング
 
 ### テストファイル配置
+
 - `src/services/dlp.ts` → `src/services/dlp.test.ts`
 - ソースコードと同じディレクトリに配置
 
 ### テスト実行
+
 ```bash
 # 全テスト
 deno test --allow-all
@@ -105,11 +110,13 @@ deno test --allow-all src/services/dlp.test.ts
 ## 🚀 デプロイ
 
 ### デプロイ先選択肢
+
 - **Deno Deploy**: 最もシンプル
 - **Supabase**: Edge Functions
 - **Cloud Run**: Docker経由
 
 ### デプロイスクリプト
+
 ```bash
 ./bin/deploy-deno.sh      # Deno Deploy
 ./bin/deploy-supabase.sh  # Supabase
@@ -169,11 +176,13 @@ PORT=8000
 ## 🚨 トラブルシューティング
 
 ### よくある問題
+
 1. **権限エラー**: `--allow-all`フラグの確認
 2. **型エラー**: `deno check`でチェック
 3. **環境変数**: `.env`ファイルの設定確認
 
 ### デバッグ
+
 ```bash
 # 詳細ログ
 deno run --allow-all --log-level debug main.ts
