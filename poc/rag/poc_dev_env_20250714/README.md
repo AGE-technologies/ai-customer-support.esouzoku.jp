@@ -39,12 +39,14 @@
 - [] BigQueryの疎通確認
 - [x] DLPの疎通確認
   - `check_dlp_api.py` で確認
-- [] Claude Code API の疎通確認
+- [] Claude API の疎通確認
 - [x] OpenAI API の疎通確認
   - `check_open_api_embeding.py` で確認
   - Pineconeに Embeddingの機能があることが判明もしかしたら使わないかも。
-- [] Pinecone API の疎通確認
-  - [] Pineconeインデックスの設定とクライアント接続確認
+- [x] Pinecone API の疎通確認 (`check_pinecone_api.py`)
+  - [x] Pineconeインデックスの設定とクライアント接続確認
+  - [x] API経由でレコードを追加する
+- [] DLP と Pinecone の連携確認
   - [] サンプルメールデータの準備（10件のcustomerメール）
   - [] メールをベクトル化してPineconeに登録する処理の実装（PineconeのEmbedding機能を使用）
   - [] 新しいメールでの類似検索機能の実装
