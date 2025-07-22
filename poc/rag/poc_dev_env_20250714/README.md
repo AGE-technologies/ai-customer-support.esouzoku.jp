@@ -56,11 +56,21 @@
   - OpenAIのEmbeddingではなく、PineconeのEmbedding機能を使用する方針に変更
 - [] Claude と Pinecone の連携確認
 
-## 直近(2025/07/15〜)やること
+## (2025/07/15〜2025/07/22) やったこと
 
 - [x] DLPの精度チェック
 - [x] OpenAIの文字列のベクトル化
-- [] Pineconeにデータ突っ込んでインデックス化してみる
+- [x] Pineconeにデータ突っ込んでインデックス化してみる
+
+## 直近やること(2025/07/23〜)やること
+
+- DLPとPineconeの連携
+  - [] メールデータ選び
+    -  BigQueryから取ってきてね
+  - [] DLPによる匿名化の構成調整
+  - []Pinecone API によるEmbedding
+  - [] Pinecone API メールデータ追加
+  - [] Pinecode API による類似度ベース検索
 
 ## Python環境構築(uv)
 
