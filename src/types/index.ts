@@ -22,6 +22,20 @@ export interface CustomerInquiry {
   hubspotTicketId?: number;
 }
 
+export interface QAPair {
+  thread_id: string;
+  timestamp: string;
+  query: string;
+  response: string;
+  metadata: {
+    query_id: string;
+    response_id: string;
+    query_time: string;
+    response_time: string;
+    response_delay_days: number;
+  };
+}
+
 export interface RAGResponse {
   answer: string;
   confidence: number;
