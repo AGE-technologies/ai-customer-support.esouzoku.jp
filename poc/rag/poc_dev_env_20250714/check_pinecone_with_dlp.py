@@ -21,11 +21,29 @@ To Claude: 作成中
   - 一般的な銀行の口座番号は未検証
 - 日本語や中国語、韓国語などは、emailの検知が難しいので、カスタムinfoTypeを採用する方向性
   - https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/16-0-1/about-data-loss-prevention-policies-v27576413-d327e9/detecting-non-english-language-content-v27895102-d327e126361/enable-token-validation-to-match-chinese-japanese-v87221850-d327e129608.html?utm_source=chatgpt.com
+
+現時点の課題:
+  - DLPの精度チェック
+    - スペース区切りが少ないことが原因による精度低下
+      - 正規表現でなんとかなることがある（今回のパターンだと e-mail)
+    - 一覧にないinfoTypeの機密情報パターンがある
+      - ゆうちょ銀行の記号・番号
+      - 1文字の姓はマスキングされないことがほとんど
+        - 〇様だと行けそうではある
+      - 〇〇法務局ももしかしたら匿名化したほうがいいかも
+  - 長文のEmbeddingアプローチ
+    - 「分割(Splitting」「チャンキング(Chunking)」のアプローチはいくつかあり、どれを採用するかは要調査
+    - 長文を適切に分割する方法は、目的によって異なる（画一的な方法は無い）
+      - LLMはかなり汎用なので調べると目的に沿わないものがたくさん出てきてノイズ感（HTMLのタグごととかMarkdownの見出しとか）
+    - 調べた限りの良さげなアプローチ
+      - 「セマンティックチャンキング」
+        - 各文をベクトル化し、類似度の相対で文を分割、類似度の近いベクトル(= 意味的に近い文)に関しては、もとの文を再結合（マージ）
+      - （実用に向けた just idea) 挨拶部分もデータベースに入れておけば、回答生成のフェーズで無視できそう
 """
 
 import os
 import json
-from typing import List
+from typing import List, TypedDict
 from google.cloud import dlp_v2
 
 # カスタムinfoType定義
@@ -35,8 +53,12 @@ CUSTOM_INFO_TYPES = [
         "regex": {"pattern": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"},
     },
     {
-        "info_type": {"name": "JAPAN_POST_BANK_SYMBOL"},
+        "info_type": {"name": "JAPAN_POST_BANK_CODE"},
         "regex": {"pattern": r"\b\d{5}\b"},
+    },
+    {
+        "info_type": {"name": "JAPAN_POST_BANK_NUMBER"},
+        "regex": {"pattern": r"\b\d{8}\b"},
     },
 ]
 
@@ -64,7 +86,8 @@ DEIDENTIFICATION_CONFIG = {
                     {"name": "PERSON_NAME"},
                     {"name": "LOCATION"},
                     {"name": "STREET_ADDRESS"},
-                    {"name": "JAPAN_POST_BANK_SYMBOL"},
+                    {"name": "JAPAN_POST_BANK_CODE"},
+                    {"name": "JAPAN_POST_BANK_NUMBER"},
                 ],
                 "primitive_transformation": {
                     "character_mask_config": {
@@ -77,7 +100,56 @@ DEIDENTIFICATION_CONFIG = {
     }
 }
 
-TEST_DATA_PATH = "./data_check_dlp_pinecone/test_data.json"
+TEXT_DATA_SRC_DIR = "./data_check_dlp_pinecone/raw/"
+TEXT_DATA_DEST_DIR = "./data_check_dlp_pinecone/dest/"
+
+
+def raw_text_json_path(file_name: str) -> str:
+    return f"{TEXT_DATA_SRC_DIR}{file_name}.json"
+
+
+def deidentified_text_json_path(file_name: str) -> str:
+    return f"{TEXT_DATA_DEST_DIR}{file_name}.json"
+
+
+class MailText(TypedDict):
+    thread_id: str
+    text: str
+
+    @staticmethod
+    def list_from_json(json_file_path) -> list["MailText"]:
+        try:
+            with open(json_file_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+
+        except FileNotFoundError:
+            raise Exception(f"ファイルが見つかりません: {json_file_path}")
+        except json.JSONDecodeError as e:
+            raise Exception(f"JSON解析エラー: {e}")
+        except Exception as e:
+            raise Exception(f"ファイル読み込みエラー: {e}")
+
+    @staticmethod
+    def list_to_json(mail_texts: list["MailText"], json_file_path: str) -> None:
+        """
+        MailTextのリストをJSONファイルに保存する
+
+        Args:
+            mail_texts: 保存対象のMailTextリスト
+            json_file_path: 保存先のJSONファイルパス
+
+        Raises:
+            Exception: ファイル書き込みエラーが発生した場合
+        """
+        try:
+            # 保存先ディレクトリが存在しない場合は作成
+            os.makedirs(os.path.dirname(json_file_path), exist_ok=True)
+
+            with open(json_file_path, "w", encoding="utf-8") as f:
+                json.dump(mail_texts, f, ensure_ascii=False, indent=2)
+
+        except Exception as e:
+            raise Exception(f"JSON書き込みエラー: {e}")
 
 
 def anonymize_text_with_dlp(
@@ -179,33 +251,6 @@ def anonymize_texts_batch(
         raise Exception(f"一括匿名化処理でエラーが発生しました: {e}")
 
 
-def load_texts_from_json(json_file_path: str) -> List[str]:
-    """
-    JSONファイルから実データのテキストリストを読み込む
-
-    Args:
-        json_file_path: JSONファイルのパス
-
-    Returns:
-        List[str]: テキストのリスト
-
-    Raises:
-        Exception: ファイル読み込みまたはJSONパースでエラーが発生した場合
-    """
-    try:
-        with open(json_file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
-            return [item["text"] for item in data]
-
-    except FileNotFoundError:
-        raise Exception(f"ファイルが見つかりません: {json_file_path}")
-    except json.JSONDecodeError as e:
-        raise Exception(f"JSON解析エラー: {e}")
-    except Exception as e:
-        raise Exception(f"ファイル読み込みエラー: {e}")
-
-
 def main():
     """メイン処理"""
     print("=== DLP匿名化機能確認 ===")
@@ -241,10 +286,15 @@ def main():
 
     # 実データを使った匿名化テスト
     print("\n--- 実データ匿名化テスト ---")
+    print(
+        f"実データを使ってテキストを匿名化します。データファイルが{TEXT_DATA_SRC_DIR}に入っていることを確認してください。"
+    )
+    test_file = input("匿名化したいファイルのファイル名を入力してください。>>")
 
     try:
         # JSONファイルからテキスト読み込み
-        real_texts = load_texts_from_json(TEST_DATA_PATH)
+        mail_texts = MailText.list_from_json(raw_text_json_path(test_file))
+        real_texts = [mail["text"] for mail in mail_texts]
         print(f"実データ読み込み: {len(real_texts)}件のテキスト")
 
         # 10件制限のため、最初の10件のみ処理
@@ -255,6 +305,18 @@ def main():
         # 実データの匿名化実行
         anonymized_real_texts = anonymize_texts_batch(dlp_client, parent, real_texts)
         print(f"✅ 実データ匿名化完了: {len(anonymized_real_texts)}件処理")
+
+        # 匿名化結果をMailTextオブジェクトとして構成
+        anonymized_mail_texts = []
+        for i, anonymized_text in enumerate(anonymized_real_texts):
+            anonymized_mail_texts.append(
+                {"thread_id": mail_texts[i]["thread_id"], "text": anonymized_text}
+            )
+
+        # 匿名化結果をJSONファイルに保存
+        output_path = deidentified_text_json_path(test_file)
+        MailText.list_to_json(anonymized_mail_texts, output_path)
+        print(f"💾 匿名化結果をJSONファイルに保存: {output_path}")
 
         # 結果サンプル表示
         for i in range(len(anonymized_real_texts)):
