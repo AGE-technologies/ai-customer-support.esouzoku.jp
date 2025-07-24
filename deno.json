@@ -1,6 +1,7 @@
 {
   "imports": {
-    "hono": "jsr:@hono/hono@^4.8.5"
+    "hono": "jsr:@hono/hono@^4.8.5",
+    "@google-cloud/bigquery": "npm:@google-cloud/bigquery@^7.0.0"
   },
   "tasks": {
     "start": "deno run --allow-net main.ts"

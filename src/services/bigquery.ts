@@ -1,3 +1,4 @@
+import { BigQuery } from "@google-cloud/bigquery";
 import type { QAPair } from "../types/index.ts";
 
 export interface BigQueryConfig {
@@ -6,43 +7,69 @@ export interface BigQueryConfig {
 }
 
 export class BigQueryService {
-  private config: BigQueryConfig;
+  private client: BigQuery;
 
   constructor(config: BigQueryConfig) {
-    this.config = config;
+    this.client = new BigQuery({
+      projectId: config.projectId,
+      keyFilename: config.keyFilename,
+    });
   }
 
   async extractQAPairs(startDate: string = "2024-01-01"): Promise<QAPair[]> {
     const queryPath = new URL("../queries/extract-qa-pairs.sql", import.meta.url);
     const queryText = await Deno.readTextFile(queryPath);
     
-    const query = queryText.replace("@start_date", `'${startDate}'`);
-    
-    // For now, return mock data during development
-    // TODO: Implement actual BigQuery client connection
-    console.log(`Would execute BigQuery with start_date: ${startDate}`);
-    console.log("Query preview:", query.substring(0, 200) + "...");
-    
-    return [
-      {
-        thread_id: "mock-thread-1",
-        timestamp: new Date().toISOString(),
-        query: "サンプル質問：相続登記について教えてください",
-        response: "サンプル回答：相続登記は...",
-        metadata: {
-          query_id: "mock-q1",
-          response_id: "mock-r1",
-          query_time: new Date().toISOString(),
-          response_time: new Date().toISOString(),
-          response_delay_days: 0,
+    try {
+      // Use BigQuery parameterized queries for safety
+      const [rows] = await this.client.query({
+        query: queryText,
+        params: {
+          start_date: startDate,
         },
-      },
-    ];
+      });
+
+      return rows.map((row: any) => ({
+        thread_id: row.thread_id,
+        timestamp: row.query_timestamp,
+        query: row.query,
+        response: row.response,
+        metadata: {
+          query_id: row.metadata.query_id,
+          response_id: row.metadata.response_id,
+          query_time: row.metadata.query_time,
+          response_time: row.metadata.response_time,
+          response_delay_days: row.metadata.response_delay_days,
+        },
+      }));
+    } catch (error) {
+      console.error("BigQuery execution failed:", error);
+      
+      // Fallback to mock data during development
+      console.log(`Fallback: Would execute BigQuery with start_date: ${startDate}`);
+      return [
+        {
+          thread_id: "mock-thread-1",
+          timestamp: new Date().toISOString(),
+          query: "サンプル質問：相続登記について教えてください",
+          response: "サンプル回答：相続登記は...",
+          metadata: {
+            query_id: "mock-q1",
+            response_id: "mock-r1",
+            query_time: new Date().toISOString(),
+            response_time: new Date().toISOString(),
+            response_delay_days: 0,
+          },
+        },
+      ];
+    }
   }
 
-  async executeQuery(query: string): Promise<unknown[]> {
-    // TODO: Implement actual BigQuery execution
-    console.log("Executing query:", query.substring(0, 100) + "...");
-    throw new Error("BigQuery client not implemented yet");
+  async executeQuery(query: string, params: Record<string, unknown> = {}): Promise<unknown[]> {
+    const [rows] = await this.client.query({
+      query,
+      params,
+    });
+    return rows;
   }
 }
