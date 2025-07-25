@@ -98,6 +98,7 @@ README TODOリストに基づいて、下記項目の達成を目指していま
 - [ ] Pinecone の 検索機能の連携確認
 - [ ] DLP と Pinecone の連携確認
 - [ ] Claude と Pinecone の連携確認
+- [ ] DLPとメールQAペアの要約（100件程度のQAペアをLLMで要約処理）
 
 
 --- 

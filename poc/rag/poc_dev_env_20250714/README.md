@@ -64,11 +64,29 @@
 
 ## 直近やること(2025/07/23〜)やること
 
+- DLPとメールQAペアの要約
+  - [] メールQAペアの取得
+  - [] QAペアに対し、DLPで機密情報を匿名化
+    - (多少もれててもしょうがない。のちのLLMがプロンプト次第で省いてくれそう。LLMによる要約に多少個人情報が入るリスクは大きなクリティカルにはならなそう)
+  - [] QAペアをLLMによってそれぞれ3~5行程度に要約
+    - [x] LLMの選定
+      - Claude
+      - GPT-4o-mini (圧倒的にコスパ良い。Claude Codeがアドバイスくれた。ありがとう)
+    - [] QはそのままLLMに投げる
+    - [] Aは、Qと一緒にLLMに投げる
+  - [] テーブル項目
+    - thread_id (QAの関連付け)
+    - query
+    - answer
+    - sent_at
+    - [] 他にないか考える
+- QAペア要約のBigQueryへの保存
+  - [] TODO調査
 - DLPとPineconeの連携
   - [] メールデータ選び
-    -  BigQueryから取ってきてね
+    -  BigQueryから取ってくる
   - [] DLPによる匿名化の構成調整
-  - []Pinecone API によるEmbedding
+  - [] Pinecone API によるEmbedding
   - [] Pinecone API メールデータ追加
   - [] Pinecode API による類似度ベース検索
 
