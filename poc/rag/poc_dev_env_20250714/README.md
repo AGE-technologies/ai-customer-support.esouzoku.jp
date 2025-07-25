@@ -46,6 +46,13 @@
 - [x] Pinecone API の疎通確認 (`check_pinecone_api.py`)
   - [x] Pineconeインデックスの設定とクライアント接続確認
   - [x] API経由でレコードを追加する
+- [] メールQAペアの匿名化と要約
+  - [] BigQueryからQAペアを取ってくる
+  - [] それを匿名化
+  - [] GPT-4o-miniによる要約
+  - [] 要約をBigQueryに保存
+    - [] BigQueryへのテーブル追加
+    - [] BigQuery API の確認
 - [] DLP と Pinecone の連携確認
   - [] サンプルメールデータの準備（10件のcustomerメール）
   - [] メールをベクトル化してPineconeに登録する処理の実装（PineconeのEmbedding機能を使用）
@@ -80,6 +87,10 @@
     - answer
     - sent_at
     - [] 他にないか考える
+  - [] 要約までの短いパイプラインづくり
+    - [] BigQueryからデータを取ってくる
+    - [] 要約
+    - [] 一旦ローカルに保存
 - QAペア要約のBigQueryへの保存
   - [] TODO調査
 - DLPとPineconeの連携
